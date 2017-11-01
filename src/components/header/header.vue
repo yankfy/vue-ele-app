@@ -1,11 +1,11 @@
 <template>
-  <div>
-      <p>头部</p>
+  <div class="header">
+    我是header
   </div>
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style lang="scss" scoped>
