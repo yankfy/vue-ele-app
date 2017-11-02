@@ -3,14 +3,14 @@ const path = require('path')
 const config = require('../config')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-exports.assetsPath = function (_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production'
-    ? config.build.assetsSubDirectory
-    : config.dev.assetsSubDirectory
+exports.assetsPath = function(_path) {
+  const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
+    config.build.assetsSubDirectory :
+    config.dev.assetsSubDirectory
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = function (options) {
+exports.cssLoaders = function(options) {
   options = options || {}
 
   const cssLoader = {
@@ -22,7 +22,7 @@ exports.cssLoaders = function (options) {
   }
 
   // generate loader string to be used with extract text plugin
-  function generateLoaders (loader, loaderOptions) {
+  function generateLoaders(loader, loaderOptions) {
     const loaders = [cssLoader]
     if (loader) {
       loaders.push({
@@ -50,7 +50,9 @@ exports.cssLoaders = function (options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
+    sass: generateLoaders('sass', {
+      indentedSyntax: true
+    }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
@@ -58,7 +60,7 @@ exports.cssLoaders = function (options) {
 }
 
 // Generate loaders for standalone style files (outside of .vue)
-exports.styleLoaders = function (options) {
+exports.styleLoaders = function(options) {
   const output = []
   const loaders = exports.cssLoaders(options)
   for (const extension in loaders) {
@@ -69,4 +71,23 @@ exports.styleLoaders = function (options) {
     })
   }
   return output
+}
+
+// scss文件import引用的报错的解决
+exports.cssLoaders = function(options) {
+
+  var cssLoader = {
+      loader: 'css-loader',
+      options: {
+        minimize: process.env.NODE_ENV === 'production',
+        sourceMap: options.sourceMap
+      }
+    },
+    postcssLoader = {
+      loader: 'postcss-loader' //解决.js文件require/import autoprefixer问题
+    }
+  // generate loader string to be used with extract text plugin
+  function generateLoaders(loader, loaderOptions) {
+    var loaders = [cssLoader, postcssLoader] //解决.js文件require/import autoprefixer问题
+  }
 }
