@@ -1,0 +1,21 @@
+@media (-webkit-min-device-pixel-radio:1.5),
+(min-device-pixel-radio:1.5) {
+  .border-1px {
+    @include border-1px(rgba(7, 17, 27, 0.1));
+    &:after {
+      transform: scaleY(0.7);
+      -webkit-transform: scaleY(0.7);
+    }
+  }
+}
+
+@media (-webkit-min-device-pixel-radio:2),
+(min-device-pixel-radio:2) {
+  .border-1px {
+    @include border-1px(rgba(7, 17, 27, 0.1));
+    &:after {
+      transform: scaleY(0.5);
+      -webkit-transform: scaleY(0.5);
+    }
+  }
+}

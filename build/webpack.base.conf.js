@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const extractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -16,14 +17,13 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production' ?
-      config.build.assetsPublicPath :
-      config.dev.assetsPublicPath
+      config.build.assetsPublicPath : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('./src')
     }
   },
   module: {
@@ -42,6 +42,14 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
+        test: /\.css$/,
+        // 分离CSS
+        use: extractTextPlugin.extract({
+          fallback: "style-loader",
+          // 增加前缀设置
+          use: ['css-loader', 'postcss-loader']
+        })
+      }, {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
@@ -78,7 +86,8 @@ module.exports = {
           loader: "css-loader" // translates CSS into CommonJS
         }, {
           loader: "sass-loader" // compiles Sass to CSS
-        }]
+        }],
+        exclude: /node_modules/
       }
     ]
   }
