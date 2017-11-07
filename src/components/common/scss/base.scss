@@ -20,8 +20,20 @@
   }
 }
 
-body,html{
+body,
+html {
   line-height: 1;
   font-weight: 200;
-  font-family: 'PingFang SC','STHeitiSC-Light','Helvetica-Light';
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light';
+}
+
+.clearfix {
+  display: inline-block;
+  &:after {
+    display: block;
+    content: '';
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+  }
 }
