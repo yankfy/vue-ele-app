@@ -14,3 +14,10 @@
 .border-1px{
     @include border-1px(rgba(7, 17, 27, 0.1));
 }
+
+@mixin bg-image($url){
+    background-image: url($url+'@2x.png');
+    @media (-webkit-min-device-pixel-ratio:3),(-webkit-min-device-pixel-ratio:3F) {
+        background-image: url($url+'@3x.png');
+    }
+}

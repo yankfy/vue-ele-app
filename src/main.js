@@ -8,6 +8,7 @@ import axios from 'axios'
 import './components/common/scss/index.scss'
 
 Vue.config.productionTip = false
+// vue-resource与axios互换
 Vue.prototype.$http = axios
 /* eslint-disable no-new */
 new Vue({
