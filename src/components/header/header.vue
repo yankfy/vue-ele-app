@@ -22,7 +22,14 @@
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper"></div>
+    <div class="bulletin-wrapper">
+      <span class="bulletin-title"></span>
+      <span class="bulletin-text">{{seller.bulletin}}</span>
+      <i class="icon-keyboard_arrow_right"></i>
+    </div>
+    <div class="background">
+      <img :src="seller.avatar" alt="" width="100%" height="100%">
+    </div>
   </div>
 </template>
 
@@ -45,8 +52,10 @@ export default {
 <style lang="scss" scoped>
 @import '../common/scss/mixin';
 .header {
+  position: relative;
   color: #ffffff;
-  background-color: #999999;
+  background-color: rgba(7, 17, 27, 0.5);
+  overflow: hidden;
   .content-wrapper {
     position: relative;
     padding: 24px 12px 18px 24px;
@@ -125,15 +134,55 @@ export default {
       border-radius: 14px;
       background-color: rgba(#000000, 0.2);
       text-align: center;
-      .count{
+      .count {
         font-size: 10px;
       }
-      .icon-keyboard_arrow_right{
+      .icon-keyboard_arrow_right {
         margin-left: 2px;
         line-height: 24px;
         font-size: 10px;
       }
     }
+  }
+  .bulletin-wrapper {
+    position: relative;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 22px 0 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: rgba(7, 17, 27, 0.2);
+    .bulletin-title {
+      display: inline-block;
+      width: 22px;
+      height: 12px;
+      vertical-align: top;
+      margin-top: 8px;
+      @include bg-image('bulletin');
+      background-size: 22px 12px;
+      background-repeat: no-repeat;
+    }
+    .bulletin-text {
+      margin: 0 4px;
+      font-size: 10px;
+      vertical-align: top;
+    }
+    .icon-keyboard_arrow_right {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 10px;
+    }
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(10px);
   }
 }
 </style>
