@@ -9,7 +9,30 @@
       </ul>
     </div>
     <div class="foods-wrapper">
-      
+      <ul>
+        <li v-for="(item,index) in goods" :key="index" class="foods-list">
+          <h1 class="title">{{item.name}}</h1>
+          <ul>
+            <li v-for="(food,index) in item.foods" :key="index" class="food-item">
+              <div class="icon">
+                <img :src="food.icon">
+              </div>
+              <div class="content">
+                <div class="name">{{food.name}}</div>
+                <p class="desc">{{food.desc}}</p>
+                <div class="extra">
+                  <span class="count">月售{{food.sellCount}}份</span>
+                  <span>好评率{{food.rating}}%</span>
+                </div>
+                <div class="price">
+                  <span class="now">￥{{food.price}}</span>
+                  <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -89,7 +112,7 @@ export default {
         vertical-align: middle;
         font-size: 12px;
         @include border-1px(rgba(7,17,27,0.1));
-        &:last-child{
+        &:last-child {
           border-bottom: none;
         }
       }
@@ -98,6 +121,73 @@ export default {
   .foods-wrapper {
     flex: 1;
     background-color: #fff;
+    .foods-list {
+      .title {
+        padding-left: 14px;
+        height: 26px;
+        line-height: 26px;
+        border-left: 2px solid #d9dde1;
+        font-size: 12px;
+        color: rgb(147, 153, 159);
+        background-color: #f3f5f7;
+      }
+    }
+    .food-item {
+      display: flex;
+      margin: 18px;
+      margin-bottom: 0;
+      padding-bottom: 18px;
+      @include border-1px(rgba(7,17,27,0.1));
+      &:last-child {
+        border-bottom: none;
+      }
+      .icon {
+        flex-basis: 57px;
+        margin-right: 10px;
+        img {
+          width: 57px;
+          height: 57px;
+        }
+      }
+      .content {
+        flex: 1;
+        .name {
+          margin: 2px 0 8px 0;
+          height: 14px;
+          line-height: 14px;
+          font-size: 14px;
+          color: rgb(7, 17, 27);
+        }
+        .desc,
+        .extra {
+          line-height: 10px;
+          font-size: 10px;
+          color: rgb(147, 153, 159);
+        }
+        .desc {
+          margin-bottom: 8px;
+        }
+        .extra {
+          .count {
+            margin-right: 12px;
+          }
+        }
+        .price {
+          font-weight: 700;
+          line-height: 24px;
+          .now {
+            margin-right: 8px;
+            font-size: 14px;
+            color: rgb(240, 20, 20);
+          }
+          .old {
+            text-decoration: line-through;
+            font-size: 10px;
+            color: rgb(147, 153, 159);
+          }
+        }
+      }
+    }
   }
 }
 </style>
