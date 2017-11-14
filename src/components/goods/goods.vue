@@ -1,16 +1,16 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menu_wrapper">
       <ul>
-        <li v-for="(item,index) in goods" :key="index" class="menu-item">
+        <li v-for="(item,index) in goods" :key="index" class="menu-item" :class="{'current':currentIndex===index}" @click="selectMenu(index,$event)">
           <span class="text">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}</span>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foods_wrapper">
       <ul>
-        <li v-for="(item,index) in goods" :key="index" class="foods-list">
+        <li v-for="(item,index) in goods" :key="index" class="foods-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food,index) in item.foods" :key="index" class="food-item">
@@ -19,7 +19,7 @@
               </div>
               <div class="content">
                 <div class="name">{{food.name}}</div>
-                <p class="desc">{{food.desc}}</p>
+                <p class="desc">{{food.description}}</p>
                 <div class="extra">
                   <span class="count">月售{{food.sellCount}}份</span>
                   <span>好评率{{food.rating}}%</span>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 const ERR_OK = 0
 export default {
   props: {
@@ -47,7 +49,9 @@ export default {
   },
   data() {
     return {
-      goods: []
+      goods: [],
+      listHeight: [],
+      scrollY: 0
     }
   },
   created() {
@@ -55,9 +59,63 @@ export default {
       res = res.data
       if (res.errno === ERR_OK) {
         this.goods = res.data
+        // DOM更新后
+        this.$nextTick(() => {
+          this._initScroll()
+          this._calculateHeight()
+        })
       }
     })
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+  },
+  computed: {
+    currentIndex() {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let height1 = this.listHeight[i]
+        let height2 = this.listHeight[i + 1]
+        console.log(height1, height2)
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+          // console.log(i)
+          return i
+        }
+      }
+      return 0
+    }
+  },
+  methods: {
+    _initScroll() {
+      this.menuScroll = new BScroll(this.$refs.menu_wrapper, {
+        click: true
+      })
+      this.foodScroll = new BScroll(this.$refs.foods_wrapper, {
+        probeType: 3
+      })
+      this.foodScroll.on('scroll', pos => {
+        this.scrollY = Math.abs(Math.round(pos.y))
+        // console.log(this.scrollY)
+      })
+    },
+    _calculateHeight() {
+      let foodList = this.$refs.foods_wrapper.getElementsByClassName(
+        'food-list-hook'
+      )
+      let height = 0
+      this.listHeight.push(height)
+      for (let i = 0; i < foodList.length; i++) {
+        let item = foodList[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
+      // console.log(this.listHeight)
+    },
+    selectMenu(index, $event) {
+      // console.log(index)
+      let foodList = this.$refs.foods_wrapper.getElementsByClassName(
+        'food-list-hook'
+      )
+      let el = foodList[index]
+      this.foodScroll.scrollToElement(el, 300)
+    }
   }
 }
 </script>
@@ -79,9 +137,20 @@ export default {
       display: table;
       height: 54px;
       width: 56px;
-      margin: 0 auto;
+      padding: 0 12px;
       line-height: 14px;
       font-size: 0;
+      &.current {
+        position: relative;
+        margin-top: -1px;
+        margin-bottom: -1px;
+        z-index: 10;
+        background-color: #fff;
+        font-weight: 700;
+        .text {
+          border: none;
+        }
+      }
       .icon {
         display: inline-block;
         width: 12px;
@@ -166,8 +235,13 @@ export default {
         }
         .desc {
           margin-bottom: 8px;
+          line-height: 12px;
         }
         .extra {
+          font-size: 0;
+          span {
+            font-size: 10px;
+          }
           .count {
             margin-right: 12px;
           }
@@ -175,6 +249,7 @@ export default {
         .price {
           font-weight: 700;
           line-height: 24px;
+          font-size: 0;
           .now {
             margin-right: 8px;
             font-size: 14px;
