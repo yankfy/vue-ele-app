@@ -34,11 +34,13 @@
         </li>
       </ul>
     </div>
+    <shopcar :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
+import shopcar from '../../components/shopcar/shopcar'
 
 const ERR_OK = 0
 export default {
@@ -73,7 +75,7 @@ export default {
       for (let i = 0; i < this.listHeight.length; i++) {
         let height1 = this.listHeight[i]
         let height2 = this.listHeight[i + 1]
-        console.log(height1, height2)
+        // console.log(height1, height2)
         if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
           // console.log(i)
           return i
@@ -116,6 +118,9 @@ export default {
       let el = foodList[index]
       this.foodScroll.scrollToElement(el, 300)
     }
+  },
+  components: {
+    shopcar
   }
 }
 </script>
