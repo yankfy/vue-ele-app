@@ -1,29 +1,36 @@
 <template>
-    <div class="shopcar">
-        <div class="content">
-            <div class="content-left">
-                <div class="logo-wrapper">
-                    <div class="logo" :class="{'highlight':totalCount>0}">
-                        <i class="icon-shopping_cart"></i>
-                    </div>
-                    <div class="number" v-if="totalCount>0">
-                        {{totalCount}}
-                    </div>
-                </div>
-                <div class="price" :class="{'highlight':totalPrice>0}">
-                    {{totalPrice}}元
-                </div>
-                <div class="desc">
-                    另需配送费￥{{deliveryPrice}}元
-                </div>
-            </div>
-            <div class="content-right">
-                <div class="pay" :class="payClass">
-                    {{payDesc}}
-                </div>
-            </div>
+  <div class="shopcar">
+    <div class="content">
+      <div class="content-left">
+        <div class="logo-wrapper">
+          <div class="logo" :class="{'highlight':totalCount>0}">
+            <i class="icon-shopping_cart"></i>
+          </div>
+          <div class="number" v-if="totalCount>0">
+            {{totalCount}}
+          </div>
         </div>
+        <div class="price" :class="{'highlight':totalPrice>0}">
+          {{totalPrice}}元
+        </div>
+        <div class="desc">
+          另需配送费￥{{deliveryPrice}}元
+        </div>
+      </div>
+      <div class="content-right">
+        <div class="pay" :class="payClass">
+          {{payDesc}}
+        </div>
+      </div>
     </div>
+    <div class="ball-container">
+      <transition-group name="drop">
+        <div class="ball" v-for="(ball,index) in balls" :key="index" v-show="ball.show">
+          <div class="inner"></div>
+        </div>
+      </transition-group>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -40,6 +47,27 @@ export default {
     },
     minPrice: {
       type: Number
+    }
+  },
+  data() {
+    return {
+      balls: [
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        }
+      ]
     }
   },
   computed: {
@@ -70,6 +98,11 @@ export default {
     payClass() {
       if (this.totalPrice < this.minPrice) return 'not-enough'
       else return 'enough'
+    }
+  },
+  methods: {
+    drop(el) {
+      console.log(el)
     }
   }
 }
@@ -173,6 +206,29 @@ export default {
         &.enough {
           background-color: #00b43c;
           color: #fff;
+        }
+      }
+    }
+  }
+  .ball-container {
+    .ball {
+      position: fixed;
+      left: 32px;
+      bottom: 22px;
+      z-index: 200;
+      &.drop-enter-active {
+        transition: all 0.4s;
+        .inner {
+          opacity: 1;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: rgb(0, 160, 220);
+        }
+      }
+      &.drop-enter {
+        .inner {
+          opacity: 0;
         }
       }
     }

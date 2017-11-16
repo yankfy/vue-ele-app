@@ -28,19 +28,23 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cart-control :food="food" @cart-add="getTarget"></cart-control>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcar :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcar>
+    <shopcar ref="shopcar" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import shopcar from '../../components/shopcar/shopcar'
+import cartControl from '../../components/cartcontrol/cartcontrol'
 
 const ERR_OK = 0
 export default {
@@ -82,6 +86,15 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods() {
+      let foods = []
+      this.goods.forEach(good => {
+        good.foods.forEach(food => {
+          if (food.count) foods.push(food)
+        })
+      })
+      return foods
     }
   },
   methods: {
@@ -90,7 +103,8 @@ export default {
         click: true
       })
       this.foodScroll = new BScroll(this.$refs.foods_wrapper, {
-        probeType: 3
+        probeType: 3,
+        click: true
       })
       this.foodScroll.on('scroll', pos => {
         this.scrollY = Math.abs(Math.round(pos.y))
@@ -117,10 +131,14 @@ export default {
       )
       let el = foodList[index]
       this.foodScroll.scrollToElement(el, 300)
+    },
+    getTarget(target) {
+      this.$refs.shopcar.drop(target)
     }
   },
   components: {
-    shopcar
+    shopcar,
+    cartControl
   }
 }
 </script>
@@ -265,6 +283,11 @@ export default {
             font-size: 10px;
             color: rgb(147, 153, 159);
           }
+        }
+        .cartcontrol-wrapper {
+          position: absolute;
+          right: 0;
+          bottom: 12px;
         }
       }
     }
