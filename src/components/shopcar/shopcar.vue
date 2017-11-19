@@ -108,15 +108,14 @@ export default {
         if (!ball.show) {
           ball.show = true
           ball.el = el
-          console.log(typeof ball)
-          /* eslint-disable no-unused-vars */
-          this.dropBalls = this.dropBalls.splice(this.dropBalls.length, 0, ball)
-          console.log(this.dropBalls)
+          console.log(ball)
+          this.dropBalls.push(ball)
           return
         }
       }
     },
     beforeEnter(el) {
+      console.log(this.dropBalls)
       let count = this.balls.length
       while (count--) {
         let ball = this.balls[count]
@@ -124,7 +123,7 @@ export default {
           let rect = ball.el.getBoundingClientRect()
           let x = rect.left - 32
           let y = -(window.innerHeight - rect.top - 22)
-          el.style.display = ''
+          el.style.display = 'block'
           el.style.webkitTransform = `translate3d(0,${y}px,0)`
           el.style.transform = `translate3d(0,${y}px,0)`
           let inner = el.getElementsByClassName('inner-hook')[0]
@@ -145,11 +144,13 @@ export default {
       })
     },
     afterEnter(el) {
-      let ball = this.dropBalls.shift()
-      if (ball.show) {
-        ball.show = false
-        el.style.display = 'none'
-      }
+      this.$nextTick(() => {
+        let ball = this.dropBalls.shift()
+        if (ball.show) {
+          ball.show = false
+          el.style.display = 'none'
+        }
+      })
     }
   }
 }
