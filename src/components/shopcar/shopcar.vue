@@ -108,8 +108,9 @@ export default {
         if (!ball.show) {
           ball.show = true
           ball.el = el
-          console.log(ball)
-          this.dropBalls.push(ball)
+          console.log(typeof ball)
+          /* eslint-disable no-unused-vars */
+          this.dropBalls = this.dropBalls.splice(this.dropBalls.length, 0, ball)
           console.log(this.dropBalls)
           return
         }
@@ -262,6 +263,7 @@ export default {
       left: 32px;
       bottom: 22px;
       z-index: 200;
+      // transition: all 1s cubic-bezier(0.49, -0.29, -0.75, 0.41);
       transition: all 1s;
       .inner {
         opacity: 1;
