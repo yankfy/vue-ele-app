@@ -25,7 +25,16 @@
             <div class="buy" v-show="!food.count || food.count === 0" @click.stop.prevent="addFirst">加入购物车</div>
           </transition>
         </div>
-        <split></split>
+        <split v-show="food.info"></split>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品详情</h1>
+          <p class="text">{{food.info}}</p>
+        </div>
+        <split v-show="food.rating"></split>
+        <div class="rating" v-show="food.rating">
+          <h1 class="title">商品评价</h1>
+          <rating-select :select-type='selectType' :only-content='onlyContent' :desc='desc' :ratings='food.ratings'></rating-select>
+        </div>
       </div>
     </div>
   </transition>
@@ -36,6 +45,8 @@ import Vue from 'vue'
 import BScorll from 'better-scroll'
 import cartControl from '../../components/cartcontrol/cartcontrol'
 import split from '../../components/split/split'
+import ratingSelect from '../../components/ratingselect/ratingselect'
+import selectType from '../../components/ratingselect/selectType'
 export default {
   props: {
     food: {
@@ -44,12 +55,21 @@ export default {
   },
   data() {
     return {
-      showFlag: false
+      showFlag: false,
+      selectType: selectType.ALL,
+      onlyContent: true,
+      desc: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
+      }
     }
   },
   methods: {
     show() {
       this.showFlag = true
+      this.selectType = selectType.ALL
+      this.onlyContent = true
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new BScorll(this.$refs.food, {
@@ -71,7 +91,8 @@ export default {
   },
   components: {
     cartControl,
-    split
+    split,
+    ratingSelect
   }
 }
 </script>
@@ -186,6 +207,30 @@ export default {
     &.fade-enter,
     &.fade-leave-to {
       opacity: 0;
+    }
+  }
+  .info {
+    padding: 18px;
+    .title {
+      line-height: 14px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: rgb(7, 17, 27);
+    }
+    .text {
+      line-height: 24px;
+      padding: 0 8px;
+      font-size: 12px;
+      color: rgb(77, 85, 93);
+    }
+  }
+  .rating {
+    padding-top: 18px;
+    .title {
+      line-height: 14px;
+      margin-left: 18px;
+      font-size: 14px;
+      color: rgb(7, 17, 27);
     }
   }
 }
