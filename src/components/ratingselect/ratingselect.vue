@@ -1,21 +1,21 @@
 <template>
-    <div class="ratingselect">
-        <div class="rating-type">
-            <span class="block positive" :class="{'active':selectType===2}">{{desc.all}}
-                <span class="count">47</span>
-            </span>
-            <span class="block positive" :class="{'active':selectType===0}">{{desc.positive}}
-                <span class="count">47</span>
-            </span>
-            <span class="block negative" :class="{'active':selectType===1}">{{desc.negative}}
-                <span class="count">10</span>
-            </span>
-        </div>
-        <div class="switch" :class="{'on':onlyContent}">
-            <span class="icon-check_circle"></span>
-            <span class="text">只看有内容的评价</span>
-        </div>
+  <div class="ratingselect">
+    <div class="rating-type">
+      <span class="block positive" :class="{'active':selectType===2}" @click="select(2,$event)">{{desc.all}}
+        <span class="count">47</span>
+      </span>
+      <span class="block positive" :class="{'active':selectType===0}" @click="select(0,$event)">{{desc.positive}}
+        <span class="count">47</span>
+      </span>
+      <span class="block negative" :class="{'active':selectType===1}" @click="select(1,$event)">{{desc.negative}}
+        <span class="count">10</span>
+      </span>
     </div>
+    <div class="switch" :class="{'on':onlyContent}">
+      <span class="icon-check_circle"></span>
+      <span class="text">只看有内容的评价</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -46,6 +46,15 @@ export default {
         }
       }
     }
+  },
+  methods: {
+    select(type, event) {
+      if (!event._constructed) {
+        return
+      }
+      this.selectType = type
+      this.$emit('ratingType.select', type)
+    }
   }
 }
 </script>
@@ -56,7 +65,7 @@ export default {
   .rating-type {
     padding: 18px 0;
     margin: 0 18px;
-    @include border-1px(rgba(7,17,27,0.1));
+    @include border-1px(rgba(7, 17, 27, 0.1));
     font-size: 0;
     .block {
       display: inline-block;
@@ -90,7 +99,7 @@ export default {
   .switch {
     padding: 12px 18px;
     line-height: 24px;
-    @include border-1px(rgba(7,17,27,0.1));
+    @include border-1px(rgba(7, 17, 27, 0.1));
     color: rgb(147, 153, 159);
     font-size: 0;
     &.on {
@@ -110,4 +119,3 @@ export default {
   }
 }
 </style>
-
