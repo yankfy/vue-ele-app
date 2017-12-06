@@ -53,6 +53,7 @@ export default {
         return
       }
       this.selectType = type
+      // this.$dispatch('ratingType.select', type)
       this.$emit('ratingType.select', type)
     }
   }
