@@ -2,16 +2,16 @@
   <div class="ratingselect">
     <div class="rating-type">
       <span class="block positive" :class="{'active':selectType===2}" @click="select(2,$event)">{{desc.all}}
-        <span class="count">47</span>
+        <span class="count">{{ratings.length}}</span>
       </span>
       <span class="block positive" :class="{'active':selectType===0}" @click="select(0,$event)">{{desc.positive}}
-        <span class="count">47</span>
+        <span class="count">{{positives.length}}</span>
       </span>
       <span class="block negative" :class="{'active':selectType===1}" @click="select(1,$event)">{{desc.negative}}
-        <span class="count">10</span>
+        <span class="count">{{negatives.length}}</span>
       </span>
     </div>
-    <div class="switch" :class="{'on':onlyContent}">
+    <div class="switch" :class="{'on':onlyContent}" @click="toggleContent">
       <span class="icon-check_circle"></span>
       <span class="text">只看有内容的评价</span>
     </div>
@@ -28,10 +28,6 @@ export default {
         return []
       }
     },
-    onlyContent: {
-      type: Boolean,
-      default: false
-    },
     desc: {
       type: Object,
       default() {
@@ -45,7 +41,20 @@ export default {
   },
   data() {
     return {
-      selectType: selectType.ALL
+      selectType: selectType.ALL,
+      onlyContent: false
+    }
+  },
+  computed: {
+    positives() {
+      return this.ratings.filter(rating => {
+        return rating.rateType === selectType.POSITIVE
+      })
+    },
+    negatives() {
+      return this.ratings.filter(rating => {
+        return rating.rateType === selectType.NEGATIVE
+      })
     }
   },
   methods: {
@@ -58,6 +67,13 @@ export default {
     },
     sendSelect(type) {
       this.$emit('ratingType.select', type)
+    },
+    toggleContent(event) {
+      if (!event._constructed) {
+        return
+      }
+      this.onlyContent = !this.onlyContent
+      this.$emit('content.toggle', this.onlyContent)
     }
   }
 }

@@ -33,7 +33,7 @@
         <split v-show="food.rating"></split>
         <div class="rating" v-show="food.rating">
           <h1 class="title">商品评价</h1>
-          <rating-select :select-type='selectType' :only-content='onlyContent' :desc='desc' :ratings='food.ratings'></rating-select>
+          <rating-select :desc='desc' :ratings='food.ratings'></rating-select>
         </div>
       </div>
     </div>
@@ -56,8 +56,6 @@ export default {
   data() {
     return {
       showFlag: false,
-      selectType: selectType.ALL,
-      onlyContent: true,
       desc: {
         all: '全部',
         positive: '推荐',
