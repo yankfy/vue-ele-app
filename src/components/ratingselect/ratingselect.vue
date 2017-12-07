@@ -28,10 +28,6 @@ export default {
         return []
       }
     },
-    selectType: {
-      type: Number,
-      default: selectType.ALL
-    },
     onlyContent: {
       type: Boolean,
       default: false
@@ -47,13 +43,20 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      selectType: selectType.ALL
+    }
+  },
   methods: {
     select(type, event) {
       if (!event._constructed) {
         return
       }
       this.selectType = type
-      // this.$dispatch('ratingType.select', type)
+      this.sendSelect(type)
+    },
+    sendSelect(type) {
       this.$emit('ratingType.select', type)
     }
   }
