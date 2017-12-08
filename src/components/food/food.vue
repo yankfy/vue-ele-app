@@ -33,10 +33,10 @@
         <split v-show="food.rating"></split>
         <div class="rating" v-show="food.rating">
           <h1 class="title">商品评价</h1>
-          <rating-select :desc='desc' :ratings='food.ratings'></rating-select>
+          <rating-select :desc='desc' :ratings='food.ratings' @ratingTypeSelect='changeType' @contentToggle='toggleContent'></rating-select>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li v-for="(rating,index) in food.ratings" class="rating-item" :key="index">
+              <li v-show="needShow(rating.rateType,rating.text)" v-for="(rating,index) in food.ratings" class="rating-item" :key="index">
                 <div class="user">
                   <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar" width="12" height="12" alt="" class="avatar">
@@ -82,7 +82,7 @@ export default {
     }
   },
   methods: {
-    show() {
+    show(selectType, onlyContent) {
       this.showFlag = true
       this.selectType = selectType.ALL
       this.onlyContent = true
@@ -103,6 +103,26 @@ export default {
       if (!event._constructed) return
       // this.$emit('cart-add', event.target)
       Vue.set(this.food, 'count', 1)
+    },
+    needShow(type, text) {
+      if (this.onlyContent && !text) return false
+      if (this.selectType === selectType.ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    },
+    changeType(selectType) {
+      this.selectType = selectType
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    toggleContent(onlyContent) {
+      this.onlyContent = onlyContent
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
     }
   },
   components: {
@@ -285,7 +305,7 @@ export default {
           .icon-thumb_up,
           .icon-thumb_down {
             margin-right: 4px;
-            line-height: 24px;
+            line-height: 16px;
             font-size: 12px;
           }
           .icon-thumb_up {

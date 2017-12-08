@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       selectType: selectType.ALL,
-      onlyContent: false
+      onlyContent: true
     }
   },
   computed: {
@@ -63,17 +63,14 @@ export default {
         return
       }
       this.selectType = type
-      this.sendSelect(type)
-    },
-    sendSelect(type) {
-      this.$emit('ratingType.select', type)
+      this.$emit('ratingTypeSelect', type)
     },
     toggleContent(event) {
       if (!event._constructed) {
         return
       }
       this.onlyContent = !this.onlyContent
-      this.$emit('content.toggle', this.onlyContent)
+      this.$emit('contentToggle', this.onlyContent)
     }
   }
 }
