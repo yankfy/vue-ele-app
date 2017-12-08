@@ -38,7 +38,7 @@
             <ul v-show="food.ratings && food.ratings.length">
               <li v-for="(rating,index) in food.ratings" class="rating-item" :key="index">
                 <div class="user">
-                  <span class="name">{{rating.name}}</span>
+                  <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar" width="12" height="12" alt="" class="avatar">
                 </div>
                 <div class="time">{{rating.rateTime}}</div>
@@ -114,6 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../common/scss/mixin';
 .food-box {
   position: fixed;
   top: 0;
@@ -247,6 +248,54 @@ export default {
       margin-left: 18px;
       font-size: 14px;
       color: rgb(7, 17, 27);
+    }
+    .rating-wrapper {
+      padding: 0 18px;
+      .rating-item {
+        position: relative;
+        padding: 16px 0;
+        @include border-1px(rgba(7,17,27,0.1));
+        .user {
+          position: absolute;
+          right: 0;
+          top: 16px;
+          line-height: 12px;
+          font: 0;
+          .name {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 6px;
+            font-size: 10px;
+            color: rgb(147, 153, 159);
+          }
+          .avatar {
+            border-radius: 50%;
+          }
+        }
+        .time {
+          margin-bottom: 6px;
+          line-height: 12px;
+          font-size: 10px;
+          color: rgb(147, 153, 159);
+        }
+        .text {
+          line-height: 12px;
+          font-size: 12px;
+          color: rgb(7, 17, 27);
+          .icon-thumb_up,
+          .icon-thumb_down {
+            margin-right: 4px;
+            line-height: 24px;
+            font-size: 12px;
+          }
+          .icon-thumb_up {
+            color: rgb(0, 160, 220);
+          }
+          .icon-thumb_down {
+            color: rgb(147, 153, 159);
+          }
+        }
+      }
     }
   }
 }
