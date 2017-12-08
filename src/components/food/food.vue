@@ -41,7 +41,7 @@
                   <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar" width="12" height="12" alt="" class="avatar">
                 </div>
-                <div class="time">{{rating.rateTime}}</div>
+                <div class="time">{{rating.rateTime | formaDate}}</div>
                 <p class="text">
                   <span :class="{'icon-thumb_up':rating.rateType === 0,'icon-thumb_down':rating.rateType === 1}"></span>
                   <span>{{rating.text}}</span>
@@ -49,7 +49,7 @@
               </li>
             </ul>
             <div class="no-rating" v-show="!food.ratings || !food.ratings.length">
-
+              <p>暂无评价</p>
             </div>
           </div>
         </div>
@@ -65,6 +65,7 @@ import cartControl from '../../components/cartcontrol/cartcontrol'
 import split from '../../components/split/split'
 import ratingSelect from '../../components/ratingselect/ratingselect'
 import selectType from '../../components/ratingselect/selectType'
+import { formaDate } from '../common/js/date'
 export default {
   props: {
     food: {
@@ -82,7 +83,7 @@ export default {
     }
   },
   methods: {
-    show(selectType, onlyContent) {
+    show() {
       this.showFlag = true
       this.selectType = selectType.ALL
       this.onlyContent = true
@@ -123,6 +124,12 @@ export default {
       this.$nextTick(() => {
         this.scroll.refresh()
       })
+    }
+  },
+  filters: {
+    formaDate(time) {
+      let date = new Date(time)
+      return formaDate(date, 'yyyy-M-dd hh:mm')
     }
   },
   components: {
@@ -315,6 +322,11 @@ export default {
             color: rgb(147, 153, 159);
           }
         }
+      }
+      .no-rating {
+        padding: 16px 0;
+        font-size: 12px;
+        color: rgb(147, 153, 159);
       }
     }
   }
