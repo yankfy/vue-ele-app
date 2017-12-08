@@ -34,6 +34,24 @@
         <div class="rating" v-show="food.rating">
           <h1 class="title">商品评价</h1>
           <rating-select :desc='desc' :ratings='food.ratings'></rating-select>
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li v-for="(rating,index) in food.ratings" class="rating-item" :key="index">
+                <div class="user">
+                  <span class="name">{{rating.name}}</span>
+                  <img :src="rating.avatar" width="12" height="12" alt="" class="avatar">
+                </div>
+                <div class="time">{{rating.rateTime}}</div>
+                <p class="text">
+                  <span :class="{'icon-thumb_up':rating.rateType === 0,'icon-thumb_down':rating.rateType === 1}"></span>
+                  <span>{{rating.text}}</span>
+                </p>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
