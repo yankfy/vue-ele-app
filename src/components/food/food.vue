@@ -75,6 +75,8 @@ export default {
   data() {
     return {
       showFlag: false,
+      selectType: selectType.ALL,
+      onlyContent: true,
       desc: {
         all: '全部',
         positive: '推荐',
