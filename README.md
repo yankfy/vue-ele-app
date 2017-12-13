@@ -2,4 +2,6 @@
 
 vue  
 vue-router  
-axios 
+axios  
+scss  
+饿了么移动端
