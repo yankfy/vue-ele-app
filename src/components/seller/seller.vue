@@ -75,7 +75,6 @@ export default {
     .desc {
       padding-bottom: 18px;
       line-height: 18px;
-      
       font-size: 0;
       @include border-1px(rgba(7,17,27,0.1));
       .star {
