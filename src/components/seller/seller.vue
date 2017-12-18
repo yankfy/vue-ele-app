@@ -29,95 +29,191 @@
           </li>
         </ul>
       </div>
+      <split></split>
+      <div class="bulletin">
+        <div class="title">公告与活动</div>
+        <div class="content-wrapper">
+          <p class="content">{{seller.bulletin}}</p>
+        </div>
+        <ul v-if="seller.supports" class="supports">
+          <li class="support-item" v-for="(item,index) in seller.supports" :key="index">
+            <span class="icon" :class="classMap[item.type]"></span>
+            <span class="text">{{item.description}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import star from '../star/star'
-  import BScorll from 'better-scroll'
-  export default {
-    props: {
-      seller: {
-        type: Object
-      }
-    },
-    created() {
-      this.$nextTick(() => {
+import star from '../star/star'
+import BScorll from 'better-scroll'
+import split from '../split/split'
+export default {
+  props: {
+    seller: {
+      type: Object
+    }
+  },
+  created() {
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScorll(this.$refs.seller, {
+        click: true
+      })
+    })
+  },
+  watch: {
+    seller() {
+      this._initScroll()
+    }
+  },
+  methods: {
+    _initScroll() {
+      if (!this.scroll) {
         this.scroll = new BScorll(this.$refs.seller, {
           click: true
         })
-      })
-    },
-    components: {
-      star
+      } else {
+        this.$nextTick(() => {
+          this.scroll = new BScorll(this.$refs.seller, {
+            click: true
+          })
+        })
+      }
     }
+  },
+  components: {
+    star,
+    split
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  @import '../common/scss/mixin';
-  .seller {
-    position: absolute;
-    top: 174px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    .overview {
-      padding: 18px;
-      .head-title {
-        margin-bottom: 8px;
-        line-height: 14px;
-        color: rgb(7, 17, 27);
-        font-size: 14px;
+@import '../common/scss/mixin';
+.seller {
+  position: absolute;
+  top: 174px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  .overview {
+    padding: 18px;
+    .head-title {
+      margin-bottom: 8px;
+      line-height: 14px;
+      color: rgb(7, 17, 27);
+      font-size: 14px;
+    }
+    .desc {
+      padding-bottom: 18px;
+      line-height: 18px;
+      font-size: 0;
+      @include border-1px(rgba(7, 17, 27, 0.1));
+      .star {
+        display: inline-block;
+        margin-right: 8px;
+        vertical-align: top;
       }
-      .desc {
-        padding-bottom: 18px;
+      .text {
+        display: inline-block;
+        margin-right: 12px;
         line-height: 18px;
-        font-size: 0;
-        @include border-1px(rgba(7, 17, 27, 0.1));
-        .star {
-          display: inline-block;
-          margin-right: 8px;
-          vertical-align: top;
-        }
-        .text {
-          display: inline-block;
-          margin-right: 12px;
-          line-height: 18px;
-          vertical-align: top;
-          font-size: 10px;
-          color: rgb(77, 85, 93);
+        vertical-align: top;
+        font-size: 10px;
+        color: rgb(77, 85, 93);
+      }
+    }
+    .remark {
+      display: flex;
+      padding-top: 18px;
+      .block {
+        flex: 1;
+        text-align: center;
+        border-right: 1px solid rgba(7, 17, 27, 0.1);
+        &:last-child {
+          border-right: none;
         }
       }
-      .remark {
-        display: flex;
-        padding-top: 18px;
-        .block {
-          flex: 1;
-          text-align: center;
-          border-right: 1px solid rgba(7, 17, 27, 0.1);
-          &:last-child {
-            border-right: none;
-          }
-        }
-        h2 {
-          margin-bottom: 4px;
-          line-height: 10px;
-          font-size: 10px;
-          color: rgb(147, 153, 159);
-        }
-        .content {
-          line-height: 24px;
-          font-size: 10px;
-          font-weight: 200;
-          color: rgb(7, 17, 27);
-          .stress {
-            font-size: 24px;
-          }
+      h2 {
+        margin-bottom: 4px;
+        line-height: 10px;
+        font-size: 10px;
+        color: rgb(147, 153, 159);
+      }
+      .content {
+        line-height: 24px;
+        font-size: 10px;
+        font-weight: 200;
+        color: rgb(7, 17, 27);
+        .stress {
+          font-size: 24px;
         }
       }
     }
   }
+  .bulletin {
+    padding: 18px 18px 0 18px;
+    .title {
+      margin-bottom: 8px;
+      line-height: 14px;
+      color: rgb(7, 17, 27);
+      font-size: 14px;
+    }
+    .content-wrapper {
+      padding: 0 12px 16px 12px;
+      @include border-1px(rgba(7, 17, 27, 0.1));
+      .content {
+        line-height: 24px;
+        font-size: 12px;
+        color: rgb(240, 20, 20);
+      }
+    }
+    .supports {
+      width: 100%;
+      margin: 0 auto;
+      .support-item {
+        padding: 16px 12px;
+        @include border-1px(rgba(7, 17, 27, 0.1));
+        font-size: 0;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      .icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+        vertical-align: top;
+        &.decrease {
+          @include bg-image('./images/decrease_4');
+        }
+        &.discount {
+          @include bg-image('./images/discount_4');
+        }
+        &.guarantee {
+          @include bg-image('./images/guarantee_4');
+        }
+        &.invoice {
+          @include bg-image('./images/invoice_4');
+        }
+        &.special {
+          @include bg-image('./images/special_4');
+        }
+      }
+      .text {
+        line-height: 16px;
+        font-size: 12px;
+      }
+    }
+  }
+}
 </style>
