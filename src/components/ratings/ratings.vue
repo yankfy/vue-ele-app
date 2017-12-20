@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rating">
     <div class="ratings" ref="ratings">
       <div class="ratings-content">
         <div class="overview">
