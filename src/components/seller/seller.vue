@@ -109,7 +109,6 @@ export default {
         return
       }
       this.favorite = !this.favorite
-      console.log(this.favorite)
     },
     _initScroll() {
       this.$nextTick(() => {
