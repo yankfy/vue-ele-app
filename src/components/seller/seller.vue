@@ -5,8 +5,8 @@
         <h1 class="head-title">{{seller.name}}</h1>
         <div class="desc">
           <star :size="36" :score="seller.score"></star>
-          <span class="text">{{seller.ratingCount}}</span>
-          <span class="text">{{seller.sellCount}}</span>
+          <span class="text">({{seller.ratingCount}})</span>
+          <span class="text">月售{{seller.sellCount}}单</span>
         </div>
         <ul class="remark">
           <li class="block">
@@ -28,6 +28,10 @@
             </div>
           </li>
         </ul>
+        <div class="favorite" @click="toggleFavorite">
+          <span class="icon-favorite" :class="{'active':favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split></split>
       <div class="bulletin">
@@ -76,15 +80,21 @@ export default {
       type: Object
     }
   },
+  data() {
+    return {
+      favorite: false
+    }
+  },
+  computed: {
+    favoriteText() {
+      return this.favorite ? '已收藏' : '收藏'
+    }
+  },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
   },
   mounted() {
-    this.$nextTick(() => {
-      this.scroll = new BScorll(this.$refs.seller, {
-        click: true
-      })
-    })
+    this._initScroll()
     this._initPicScroll()
   },
   watch: {
@@ -94,41 +104,52 @@ export default {
     }
   },
   methods: {
+    toggleFavorite(event) {
+      if (!event._constructed) {
+        return
+      }
+      this.favorite = !this.favorite
+      console.log(this.favorite)
+    },
     _initScroll() {
-      if (!this.scroll) {
-        this.scroll = new BScorll(this.$refs.seller, {
-          click: true
-        })
-      } else {
-        this.$nextTick(() => {
+      this.$nextTick(() => {
+        if (!this.scroll) {
           this.scroll = new BScorll(this.$refs.seller, {
             click: true
           })
-        })
-        // this.scroll.refresh()
-      }
+        } else {
+          // this.$nextTick(() => {
+          //   this.scroll = new BScorll(this.$refs.seller, {
+          //     click: true
+          //   })
+          // })
+          this.scroll.refresh()
+        }
+      })
     },
     _initPicScroll() {
-      if (this.seller.pics) {
-        let picWidth = 120
-        let margin = 6
-        let width = (picWidth + margin) * this.seller.pics.length - margin
-        this.$refs.picList.style.width = width + 'px'
-        if (!this.picScroll) {
-          this.picScroll = new BScorll(this.$refs.picWrapper, {
-            scrollX: true,
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.$nextTick(() => {
+      this.$nextTick(() => {
+        if (this.seller.pics) {
+          let picWidth = 120
+          let margin = 6
+          let width = (picWidth + margin) * this.seller.pics.length - margin
+          this.$refs.picList.style.width = width + 'px'
+          if (!this.picScroll) {
             this.picScroll = new BScorll(this.$refs.picWrapper, {
               scrollX: true,
               eventPassthrough: 'vertical'
             })
-          })
-          // this.picScroll.refresh()
+          } else {
+            // this.$nextTick(() => {
+            //   this.picScroll = new BScorll(this.$refs.picWrapper, {
+            //     scrollX: true,
+            //     eventPassthrough: 'vertical'
+            //   })
+            // })
+            this.picScroll.refresh()
+          }
         }
-      }
+      })
     }
   },
   components: {
@@ -199,6 +220,29 @@ export default {
         .stress {
           font-size: 24px;
         }
+      }
+    }
+    .favorite {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 36px;
+      text-align: center;
+      .icon-favorite {
+        display: block;
+        margin-bottom: 4px;
+        line-height: 24px;
+        font-size: 24px;
+        color: rgb(147, 153, 159);
+        &.active {
+          color: rgb(240, 20, 20);
+        }
+      }
+      .text {
+        display: block;
+        line-height: 10px;
+        font-size: 10px;
+        color: rgb(77, 85, 93);
       }
     }
   }
@@ -298,14 +342,14 @@ export default {
       font-size: 14px;
       @include border-1px(rgba(7,17,27,0.1));
     }
-    .info-item{
+    .info-item {
       padding: 16px 12px;
       line-height: 16px;
       @include border-1px(rgba(7,17,27,0.1));
       color: rgb(7, 17, 27);
       font-size: 12px;
-      &:last-child{
-        &::after{
+      &:last-child {
+        &::after {
           border: none;
         }
       }
