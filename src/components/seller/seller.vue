@@ -74,6 +74,7 @@
 import star from '../star/star'
 import BScorll from 'better-scroll'
 import split from '../split/split'
+import { saveToLocal, loadFromLocal } from '../common/js/store'
 export default {
   props: {
     seller: {
@@ -82,11 +83,15 @@ export default {
   },
   data() {
     return {
-      favorite: false
+      favorite: (() => {
+        // console.log(loadFromLocal(this.seller.id, 'favorite', false))
+        return loadFromLocal(this.seller.id, 'favorite', false)
+      })()
     }
   },
   computed: {
     favoriteText() {
+      // console.log(this.favorite)
       return this.favorite ? '已收藏' : '收藏'
     }
   },
@@ -109,6 +114,7 @@ export default {
         return
       }
       this.favorite = !this.favorite
+      saveToLocal(this.seller.id, 'favorite', this.favorite)
     },
     _initScroll() {
       this.$nextTick(() => {
